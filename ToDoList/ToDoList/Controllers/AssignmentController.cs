@@ -15,9 +15,37 @@ public class AssignmentController : Controller
         _context = context;
     }
     
-    public async Task<IActionResult> Index(SortAssignmentState sortAssignmentState = SortAssignmentState.NameAsc, int page = 1)
+    public async Task<IActionResult> Index(string name, DateTime? dateFrom, DateTime? dateTo, string description, int? priority, int? status, SortAssignmentState sortAssignmentState = SortAssignmentState.NameAsc, int page = 1)
     {
-        IEnumerable<Assignment> assignments = await _context.Assignments.ToListAsync();
+        IQueryable<Assignment> assignments = _context.Assignments;
+        
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            assignments = assignments.Where(a => a.Name == name);
+        }
+        if (!string.IsNullOrWhiteSpace(description))
+        {
+            assignments = assignments.Where(a => a.Name.Contains(description));
+        }
+        if (dateFrom.HasValue)
+        {
+            dateFrom = DateTime.SpecifyKind(dateFrom.Value, DateTimeKind.Utc);
+            assignments = assignments.Where(a => a.DateCreation >= dateFrom);
+        }
+        if (dateTo.HasValue)
+        {
+            dateTo = DateTime.SpecifyKind(dateTo.Value, DateTimeKind.Utc);
+            assignments = assignments.Where(a => a.DateCreation <= dateTo);
+        }
+        if (priority.HasValue)
+        {
+            assignments = assignments.Where(a => a.Priority == priority.Value);
+        }
+        if (status.HasValue)
+        {
+            assignments = assignments.Where(a => a.Status == status.Value);
+        }
+        
         ViewBag.NameSort = sortAssignmentState == SortAssignmentState.NameAsc ? SortAssignmentState.NameDesc : SortAssignmentState.NameAsc;
         ViewBag.PrioritySort = sortAssignmentState == SortAssignmentState.PriorityAsc ? SortAssignmentState.PriorityDesc : SortAssignmentState.PriorityAsc;
         ViewBag.StatusSort = sortAssignmentState == SortAssignmentState.StatusAsc ? SortAssignmentState.StatusDesc : SortAssignmentState.StatusAsc;
@@ -58,7 +86,17 @@ public class AssignmentController : Controller
         var aivm = new AssignmentIndexViewModel()
         {
             Assignments = items.ToList(),
-            PageViewModel = pvm
+            PageViewModel = pvm,
+            FilterName = name,
+            FilterDescription = description,
+            DateFrom = dateFrom,
+            DateTo = dateTo,
+            Priority1 = (priority == 1),
+            Priority2 = (priority == 2),
+            Priority3 = (priority == 3),
+            Status1 = (status == 1),
+            Status2 = (status == 2),
+            Status3 = (status == 3)
         };
         
         return View(aivm);
