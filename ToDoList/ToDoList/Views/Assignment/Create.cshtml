@@ -1,0 +1,46 @@
+﻿@model Assignment
+
+@{
+    ViewBag.Title = "Add new task";
+}
+
+<div class="bg-dark text-center pt-5 pb-4">
+    <h3 class="text-white mb-5">Fill out the form to add a new task</h3>
+    <form asp-action="Create" asp-controller="Assignment" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="form_row mb-3">
+            <label for="Name" class="col-4">
+                <input type="text" class="form-control" asp-for="Name" placeholder="Specify task name...">
+                <span asp-validation-for="Name" class="text-error"/>
+            </label>
+        </div>
+        <div class="form_row mb-3">
+            <label for="ArtistName" class="col-4">
+                <input type="text" class="form-control" asp-for="ArtistName" placeholder="Specify book author...">
+                <span asp-validation-for="ArtistName" class="text-error"/>
+            </label>
+        </div>
+        <div class="form_row mb-3">
+            <label for="" class="col-4">
+                <textarea asp-for="Description" type="text" class="form-control" placeholder="Provide a description of the task..." rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-error"/>
+            </label>
+        </div>
+        <div class="form_row mb-3">
+            <label for="Priority" class="col-4">
+                <p class="text-secondary">Specify the priority of the task:</p>
+                <select asp-for="Priority" class="form-control">
+                    <option value="3">High</option>
+                    <option value="2">Medium</option>
+                    <option value="1">Low</option>
+                </select>
+                <span asp-validation-for="Priority" class="text-error"></span>
+            </label>
+        </div>
+        <button type="submit" class="btn btn-outline-light mb-3 w-25">Add new task</button>
+    </form>
+</div>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
