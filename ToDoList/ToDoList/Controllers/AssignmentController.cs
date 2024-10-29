@@ -56,7 +56,7 @@ public class AssignmentController : Controller
     public async Task<IActionResult> Open(int assignmentId)
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
-        if (assignment != null)
+        if (assignment != null && assignment.Status == 1)
         {
             assignment.DateOpening = DateTime.UtcNow;
             assignment.Status = 2;
@@ -70,7 +70,7 @@ public class AssignmentController : Controller
     public async Task<IActionResult> Close(int assignmentId)
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
-        if (assignment != null)
+        if (assignment != null && assignment.Status == 2)
         {
             assignment.DateClosing = DateTime.UtcNow;
             assignment.Status = 3;
@@ -79,5 +79,16 @@ public class AssignmentController : Controller
         }
 
         return RedirectToAction("Index");
+    }
+    
+    public async Task<IActionResult> Details(int assignmentId)
+    {
+        Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
+        if (assignment != null)
+        {
+            return View(assignment);
+        }
+
+        return NotFound();
     }
 }

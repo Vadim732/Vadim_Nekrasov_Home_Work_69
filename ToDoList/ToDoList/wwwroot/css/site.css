@@ -39,3 +39,13 @@ body {
   color: #146c43;
   font-weight: bold;
 }
+
+.priority-details-color-1 {
+  color: #20c997;
+  font-weight: bold;
+}
+
+.description-details {
+  margin: 0 1.6em;
+  color: #bacbe6;
+}

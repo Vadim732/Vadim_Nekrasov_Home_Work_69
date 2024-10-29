@@ -36,15 +36,18 @@
                     @if (a.Status == 1)
                     {
                         <a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Open</a>
+                        <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
                         <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
                     }
                     @if (a.Status == 2)
                     {
                         <a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Close</a>
+                        <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
                     }
                     @if (a.Status == 3)
                     {
                         <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
+                        <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
                     }
                 </td>
             </tr>

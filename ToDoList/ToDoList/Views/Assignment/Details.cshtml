@@ -1,0 +1,46 @@
+﻿@model Assignment
+
+@{
+    ViewBag.Title = "Details assignment";
+}
+
+<div class="bg-dark text-white pt-4 mt-5">
+    <div class="row px-5">
+        <div class="col-4 border-end border-white">
+            <h4 class="text-center mb-5">Info</h4>
+            <p><strong>Task name: </strong>@Model.Name</p>
+            <p><strong>Performer: </strong>@Model.ArtistName</p>
+            <p><strong>Task creation date: </strong>@Model.DateCreation</p>
+            @if (Model.Priority == 1) { <p><strong>Priority: </strong><span class="priority-color-3">High</span></p> }
+            @if (Model.Priority == 2) { <p><strong>Priority: </strong><span class="priority-color-2">Medium</span></p> }
+            @if (Model.Priority == 3) { <p><strong>Priority: </strong><span class="priority-details-color-1">Low</span></p> }
+            @if (Model.Status == 1) { <p><strong>Status: </strong>New</p> }
+            @if (Model.Status == 2) { <p><strong>Status: </strong>Open</p> }
+            @if (Model.Status == 3) { <p><strong>Status: </strong>Closed</p> }
+            @if (Model.DateOpening != null) {<p><strong>Date opening: </strong>@Model.DateOpening</p>}
+            @if (Model.DateClosing != null) {<p><strong>Date closing: </strong>@Model.DateClosing</p>}
+            <div class="border-top border-white mt-1 mb-1">
+                @if (Model.Status == 1)
+                {
+                    <p class="text-center mt-4"><a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Open</a></p>
+                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
+                    <p class="text-center mt-2"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75">Delete</a></p>
+                }
+                @if (Model.Status == 2)
+                {
+                    <p class="text-center mt-4"><a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Close</a></p>
+                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
+                }
+                @if (Model.Status == 3)
+                {
+                    <p class="text-center mt-4"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75">Delete</a></p>
+                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
+                }
+            </div>
+        </div>
+        <div class="col-8 text-center">
+            <h4 class="text-center mt-3">Description task</h4>
+            <p class="description-details">@Model.Description</p>
+        </div>
+    </div>
+</div>
