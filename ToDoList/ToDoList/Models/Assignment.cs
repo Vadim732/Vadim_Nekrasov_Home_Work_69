@@ -15,6 +15,7 @@ public class Assignment
     [Required]
     public string ArtistName { get; set; }
     [Required]
+    [StringLength(200, MinimumLength = 16)]
     public string Description { get; set; }
     public DateTime DateCreation { get; set; }
     public DateTime? DateOpening { get; set; }

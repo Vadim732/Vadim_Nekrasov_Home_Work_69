@@ -16,7 +16,7 @@
         </div>
         <div class="form_row mb-3">
             <label for="ArtistName" class="col-4">
-                <input type="text" class="form-control" asp-for="ArtistName" placeholder="Specify book author...">
+                <input type="text" class="form-control" asp-for="ArtistName" placeholder="Specify the performer of the task...">
                 <span asp-validation-for="ArtistName" class="text-error"/>
             </label>
         </div>
@@ -30,9 +30,9 @@
             <label for="Priority" class="col-4">
                 <p class="text-secondary">Specify the priority of the task:</p>
                 <select asp-for="Priority" class="form-control">
-                    <option value="3">High</option>
+                    <option value="1">High</option>
                     <option value="2">Medium</option>
-                    <option value="1">Low</option>
+                    <option value="3">Low</option>
                 </select>
                 <span asp-validation-for="Priority" class="text-error"></span>
             </label>

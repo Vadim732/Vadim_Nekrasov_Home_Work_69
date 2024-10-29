@@ -20,3 +20,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.text-error {
+  color: #ff1c1c;
+}
+
+.priority-color-3 {
+  color: red;
+  font-weight: bold;
+}
+
+.priority-color-2 {
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+.priority-color-1 {
+  color: #146c43;
+  font-weight: bold;
+}
