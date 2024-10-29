@@ -1,27 +1,55 @@
-﻿@model List<Assignment>
+﻿@model ToDoList.ViewModels.AssignmentIndexViewModel
 
 @{
     ViewBag.Title = "List tasks";
 }
 
-@if (Model != null && Model.Count != 0)
+<div class="bg-dark sort-stick text-white d-flex justify-content-center align-items-center p-3">
+    <div class="me-auto">
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="btn btn-outline-light">Back</a>
+        }
+    </div>
+    <h5 class="m-0 mx-auto">Pages</h5>
+    <div class="ms-auto">
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="btn btn-outline-light">Next</a>
+        }
+    </div>
+</div>
+
+@if (Model != null && Model.Assignments.Count > 0 && Model.Assignments != null)
 {
     <table class="table table-striped">
         <thead class="table-dark">
         <tr>
             <th>Number</th>
-            <th>Task name</th>
-            <th>Priority</th>
-            <th>Status</th>
+            <th>
+                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.NameSort" class="text-white">Task name</a>
+            </th>
+            <th>Performer</th>
+            <th>
+                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.DateCreationSort" class="text-white">Task date creation</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.PrioritySort" class="text-white">Priority</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.StatusSort" class="text-white">Status</a>
+            </th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var a in Model)
+        @foreach (var a in Model.Assignments)
         {
             <tr>
                 <td>@a.Id</td>
                 <td>@a.Name</td>
+                <td>@a.ArtistName</td>
+                <td>@a.DateCreation</td>
                 <td>
                     @if (a.Priority == 1) { <p class="priority-color-3">High</p> }
                     @if (a.Priority == 2) { <p class="priority-color-2">Medium</p> }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
+using ToDoList.Services;
+using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers;
 
@@ -13,11 +15,53 @@ public class AssignmentController : Controller
         _context = context;
     }
     
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(SortAssignmentState sortAssignmentState = SortAssignmentState.NameAsc, int page = 1)
     {
-        List<Assignment> assignments = await _context.Assignments.ToListAsync();
+        IEnumerable<Assignment> assignments = await _context.Assignments.ToListAsync();
+        ViewBag.NameSort = sortAssignmentState == SortAssignmentState.NameAsc ? SortAssignmentState.NameDesc : SortAssignmentState.NameAsc;
+        ViewBag.PrioritySort = sortAssignmentState == SortAssignmentState.PriorityAsc ? SortAssignmentState.PriorityDesc : SortAssignmentState.PriorityAsc;
+        ViewBag.StatusSort = sortAssignmentState == SortAssignmentState.StatusAsc ? SortAssignmentState.StatusDesc : SortAssignmentState.StatusAsc;
+        ViewBag.DateCreationSort = sortAssignmentState == SortAssignmentState.DateCreationAsc ? SortAssignmentState.DateCreationDesc : SortAssignmentState.DateCreationAsc;
+        switch (sortAssignmentState)
+        {
+            case SortAssignmentState.NameAsc:
+                assignments = assignments.OrderBy(a => a.Name);
+                break;
+            case SortAssignmentState.NameDesc:
+                assignments = assignments.OrderByDescending(a => a.Name);
+                break;
+            case SortAssignmentState.PriorityAsc:
+                assignments = assignments.OrderBy(a => a.Priority);
+                break;
+            case SortAssignmentState.PriorityDesc:
+                assignments = assignments.OrderByDescending(a => a.Priority);
+                break;
+            case SortAssignmentState.StatusAsc:
+                assignments = assignments.OrderBy(a => a.Status);
+                break;
+            case SortAssignmentState.StatusDesc:
+                assignments = assignments.OrderByDescending(a => a.Status);
+                break;
+            case SortAssignmentState.DateCreationAsc:
+                assignments = assignments.OrderBy(a => a.DateCreation);
+                break;
+            case SortAssignmentState.DateCreationDesc:
+                assignments = assignments.OrderByDescending(a => a.DateCreation);
+                break;
+        }
         
-        return View(assignments);
+        int pageSize = 3;
+        int count = assignments.Count();
+        var items = assignments.Skip((page - 1) * pageSize).Take(pageSize);
+        
+        PageViewModel pvm = new PageViewModel(assignments.Count(), page, pageSize);
+        var aivm = new AssignmentIndexViewModel()
+        {
+            Assignments = items.ToList(),
+            PageViewModel = pvm
+        };
+        
+        return View(aivm);
     }
     
     public async Task<IActionResult> Create()
