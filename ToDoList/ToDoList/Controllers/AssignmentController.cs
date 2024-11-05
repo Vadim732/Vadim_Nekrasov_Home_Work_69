@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 using ToDoList.Services;
@@ -25,7 +25,7 @@ public class AssignmentController : Controller
         }
         if (!string.IsNullOrWhiteSpace(description))
         {
-            assignments = assignments.Where(a => a.Name.Contains(description));
+            assignments = assignments.Where(a => a.Description.Contains(description));
         }
         if (dateFrom.HasValue)
         {
@@ -126,7 +126,7 @@ public class AssignmentController : Controller
     public async Task<IActionResult> Delete(int assignmentId)
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
-        if (assignment != null)
+        if (assignment != null && assignment.Status != 2)
         {
             _context.Remove(assignment);
             await _context.SaveChangesAsync();

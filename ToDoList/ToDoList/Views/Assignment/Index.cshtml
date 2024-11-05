@@ -4,16 +4,90 @@
     ViewBag.Title = "List tasks";
 }
 
-<div class="bg-dark sort-stick text-white d-flex justify-content-center align-items-center p-3">
+<div>
+    @if (Model != null && Model.Assignments.Count > 0 && Model.Assignments != null)
+    {
+        <table class="table table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Number</th>
+                <th>
+                    <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.NameSort" class="text-white">Task name</a>
+                </th>
+                <th>Performer</th>
+                <th>
+                    <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.DateCreationSort" class="text-white">Task date creation</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.PrioritySort" class="text-white">Priority</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.StatusSort" class="text-white">Status</a>
+                </th>
+                <th>Action</th>
+                <th>
+                    <button type="button" class="btn btn-light m-0 mx-auto" data-bs-toggle="modal" data-bs-target="#filtration">
+                        Filtration
+                    </button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var a in Model.Assignments)
+            {
+                <tr>
+                    <td>@a.Id</td>
+                    <td>@a.Name</td>
+                    <td>@a.ArtistName</td>
+                    <td>@a.DateCreation</td>
+                    <td>
+                        @if (a.Priority == 1) { <p class="priority-color-3">High</p> }
+                        @if (a.Priority == 2) { <p class="priority-color-2">Medium</p> }
+                        @if (a.Priority == 3) { <p class="priority-color-1">Low</p> }
+                    </td>
+                    <td>
+                        @if (a.Status == 1) { <p>New</p> }
+                        @if (a.Status == 2) { <p>Open</p> }
+                        @if (a.Status == 3) { <p>Closed</p> }
+                    </td>
+                    <td>
+                        @if (a.Status == 1)
+                        {
+                            <a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Open</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                            <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
+                        }
+                        @if (a.Status == 2)
+                        {
+                            <a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Close</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                        }
+                        @if (a.Status == 3)
+                        {
+                            <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4 class="text-center">Unfortunately, there are no tasks for you at the moment :с</h4>
+        <p class="text-center"><a asp-action="Create" asp-controller="Assignment" class="btn btn-dark">Add new task</a></p>
+    }
+</div>
+
+<div class="bg-dark sort-stick text-white d-flex mt-5 justify-content-center align-items-center p-3">
     <div class="me-auto">
         @if (Model.PageViewModel.HasPreviousPage)
         {
             <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="btn btn-outline-light">Back</a>
         }
     </div>
-    <button type="button" class="btn btn-light m-0 mx-auto" data-bs-toggle="modal" data-bs-target="#filtration">
-      Filtration
-    </button>
+    <h5 class="m-0 mx-auto">Pages</h5>
     <div class="ms-auto">
         @if (Model.PageViewModel.HasNextPage)
         {
@@ -21,75 +95,6 @@
         }
     </div>
 </div>
-
-@if (Model != null && Model.Assignments.Count > 0 && Model.Assignments != null)
-{
-    <table class="table table-striped">
-        <thead class="table-dark">
-        <tr>
-            <th>Number</th>
-            <th>
-                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.NameSort" class="text-white">Task name</a>
-            </th>
-            <th>Performer</th>
-            <th>
-                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.DateCreationSort" class="text-white">Task date creation</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.PrioritySort" class="text-white">Priority</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-controller="Assignment" asp-route-sortAssignmentState="@ViewBag.StatusSort" class="text-white">Status</a>
-            </th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var a in Model.Assignments)
-        {
-            <tr>
-                <td>@a.Id</td>
-                <td>@a.Name</td>
-                <td>@a.ArtistName</td>
-                <td>@a.DateCreation</td>
-                <td>
-                    @if (a.Priority == 1) { <p class="priority-color-3">High</p> }
-                    @if (a.Priority == 2) { <p class="priority-color-2">Medium</p> }
-                    @if (a.Priority == 3) { <p class="priority-color-1">Low</p> }
-                </td>
-                <td>
-                    @if (a.Status == 1) { <p>New</p> }
-                    @if (a.Status == 2) { <p>Open</p> }
-                    @if (a.Status == 3) { <p>Closed</p> }
-                </td>
-                <td>
-                    @if (a.Status == 1)
-                    {
-                        <a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Open</a>
-                        <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
-                        <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
-                    }
-                    @if (a.Status == 2)
-                    {
-                        <a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Close</a>
-                        <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
-                    }
-                    @if (a.Status == 3)
-                    {
-                        <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
-                        <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
-                    }
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <h4 class="text-center">Unfortunately, there are no tasks for you at the moment :с</h4>
-    <p class="text-center"><a asp-action="Create" asp-controller="Assignment" class="btn btn-dark">Add new task</a></p>
-}
 
 <div class="modal fade" id="filtration" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
