@@ -154,12 +154,15 @@ public class AssignmentController : Controller
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
         var user = await _userManager.GetUserAsync(User);
-        if (assignment != null && assignment.Status != 2 && user != null && assignment.UserCreatorId == user.Id)
+        if (assignment != null && assignment.Status != 2 && user != null)
         {
-            _context.Remove(assignment);
-            await _context.SaveChangesAsync();
-            
-            return RedirectToAction("Index");
+            if (assignment.UserCreatorId == user.Id || User.IsInRole("admin"))
+            {
+                _context.Remove(assignment);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
         }
 
         return Forbid();
@@ -188,15 +191,18 @@ public class AssignmentController : Controller
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
         var user = await _userManager.GetUserAsync(User);
-        if (assignment != null && assignment.Status == 1 && user != null && assignment.UserPerformerId == user.Id)
+        if (assignment != null && assignment.Status == 1 && user != null)
         {
-            assignment.DateOpening = DateTime.UtcNow;
-            assignment.Status = 2;
-            
-            _context.Update(assignment);
-            await _context.SaveChangesAsync();
-            
-            return RedirectToAction("Index");
+            if (assignment.UserPerformerId == user.Id || User.IsInRole("admin"))
+            {
+                assignment.DateOpening = DateTime.UtcNow;
+                assignment.Status = 2;
+
+                _context.Update(assignment);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
         }
 
         return Forbid();
@@ -207,12 +213,15 @@ public class AssignmentController : Controller
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
         var user = await _userManager.GetUserAsync(User);
-        if (assignment != null && assignment.Status == 2 && user != null && assignment.UserPerformerId == user.Id)
+        if (assignment != null && assignment.Status == 2 && user != null)
         {
-            assignment.DateClosing = DateTime.UtcNow;
-            assignment.Status = 3;
-            _context.Update(assignment);
-            await _context.SaveChangesAsync();
+            if (assignment.UserPerformerId == user.Id || User.IsInRole("admin"))
+            {
+                assignment.DateClosing = DateTime.UtcNow;
+                assignment.Status = 3;
+                _context.Update(assignment);
+                await _context.SaveChangesAsync();
+            }
         }
 
         return RedirectToAction("Index");
@@ -234,9 +243,12 @@ public class AssignmentController : Controller
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
         var user = await _userManager.GetUserAsync(User);
-        if (assignment != null && user != null && assignment.UserCreatorId == user.Id)
+        if (assignment != null && user != null)
         {
-            return View(assignment);
+            if (assignment.UserCreatorId == user.Id || User.IsInRole("admin"))
+            {
+                return View(assignment);
+            }
         }
         
         return NotFound();
@@ -250,19 +262,22 @@ public class AssignmentController : Controller
         {
             var existingAssignment = await _context.Assignments.AsNoTracking().FirstOrDefaultAsync(a => a.Id == assignment.Id);
             var user = await _userManager.GetUserAsync(User);
-            if (existingAssignment != null && user != null && assignment.UserCreatorId == user.Id)
+            if (existingAssignment != null && user != null)
             {
-                assignment.DateCreation = existingAssignment.DateCreation;
-                assignment.DateOpening = existingAssignment.DateOpening;
-                assignment.DateClosing = existingAssignment.DateClosing;
-                assignment.UserCreatorId = existingAssignment.UserCreatorId;
-                assignment.UserPerformerId = existingAssignment.UserPerformerId;
-                assignment.Status = existingAssignment.Status;
-                
-                _context.Assignments.Update(assignment);
-                await _context.SaveChangesAsync();
-                
-                return RedirectToAction("Index");
+                if (assignment.UserCreatorId == user.Id || User.IsInRole("admin"))
+                {
+                    assignment.DateCreation = existingAssignment.DateCreation;
+                    assignment.DateOpening = existingAssignment.DateOpening;
+                    assignment.DateClosing = existingAssignment.DateClosing;
+                    assignment.UserCreatorId = existingAssignment.UserCreatorId;
+                    assignment.UserPerformerId = existingAssignment.UserPerformerId;
+                    assignment.Status = existingAssignment.Status;
+
+                    _context.Assignments.Update(assignment);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
             }
 
             return NotFound();
