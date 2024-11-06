@@ -26,7 +26,7 @@
                     <p class="text-center mt-4"><a asp-action="TakeOnTask" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-success w-75">Take on the task</a></p>
                     <p class="text-center mt-2"><a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Open</a></p>
                     <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
-                    @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                    @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value || User.IsInRole("admin"))
                     {
                         <p class="text-center mt-2"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75">Delete</a></p>
                     }
@@ -38,13 +38,13 @@
                 }
                 @if (Model.Status == 3)
                 {
-                    @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                    @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value || User.IsInRole("admin"))
                     {
                         <p class="text-center mt-4"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75">Delete</a></p>
                     }
                     <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
                 }
-                @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)
+                @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value || User.IsInRole("admin"))
                 {
                     <p class="text-center mt-2">
                         <a asp-action="Edit" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Edit task</a>
