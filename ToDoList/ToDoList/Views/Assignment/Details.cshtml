@@ -26,6 +26,7 @@
                     <p class="text-center mt-4"><a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Open</a></p>
                     <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
                     <p class="text-center mt-2"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75">Delete</a></p>
+                    <p class="text-center mt-2"><a asp-action="Edit" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Edit task</a></p>
                 }
                 @if (Model.Status == 2)
                 {

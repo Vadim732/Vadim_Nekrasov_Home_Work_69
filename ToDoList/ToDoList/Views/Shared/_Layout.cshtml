@@ -12,16 +12,22 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand text-white" asp-area="" asp-controller="Assignment" asp-action="Index">ToDoList</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Assignment" asp-action="Index">ToDoList</a>
+            }
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Assignment" asp-action="Create">Add new task</a>
-                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Assignment" asp-action="Create">Add new task</a>
+                        </li>
+                    }
                 </ul>
                 <ul class="navbar-nav d-flex">
                     @if (User.Identity.IsAuthenticated)

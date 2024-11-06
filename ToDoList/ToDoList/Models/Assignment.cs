@@ -20,4 +20,10 @@ public class Assignment
     public DateTime DateCreation { get; set; }
     public DateTime? DateOpening { get; set; }
     public DateTime? DateClosing { get; set; }
+    
+    public int? UserPerformerId { get; set; }
+    public User? UserPerformer { get; set; }
+    
+    public int? UserCreatorId { get; set; }
+    public User? UserCreator { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Models;
 using ToDoList.Services;
@@ -6,13 +8,16 @@ using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers;
 
+[Authorize]
 public class AssignmentController : Controller
 {
     private readonly ToDoListContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public AssignmentController(ToDoListContext context)
+    public AssignmentController(ToDoListContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
     
     public async Task<IActionResult> Index(string name, DateTime? dateFrom, DateTime? dateTo, string description, int? priority, int? status, SortAssignmentState sortAssignmentState = SortAssignmentState.NameAsc, int page = 1)
@@ -102,57 +107,79 @@ public class AssignmentController : Controller
         return View(aivm);
     }
     
+    [Authorize(Roles = "user, admin")]
     public async Task<IActionResult> Create()
     {
         return View();
     }
     
     [HttpPost]
+    [Authorize(Roles = "user, admin")]
     public async Task<IActionResult> Create(Assignment assignment)
     {
         if (ModelState.IsValid)
         {
-            assignment.DateCreation = DateTime.UtcNow;
-            assignment.Status = 1;
-            _context.Assignments.Add(assignment);
-            await _context.SaveChangesAsync();
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                assignment.UserCreatorId = user.Id;
+                assignment.DateCreation = DateTime.UtcNow;
+                assignment.Status = 1;
+                
+                _context.Assignments.Add(assignment);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+
+            return NotFound();
         }
 
         return View(assignment);
     }
     
+    [Authorize(Roles = "user, admin")]
     public async Task<IActionResult> Delete(int assignmentId)
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
-        if (assignment != null && assignment.Status != 2)
+        var user = await _userManager.GetUserAsync(User);
+        if (assignment != null && assignment.Status != 2 && user != null && assignment.UserCreatorId == user.Id)
         {
             _context.Remove(assignment);
             await _context.SaveChangesAsync();
+            
+            return RedirectToAction("Index");
         }
 
-        return RedirectToAction("Index");
+        return Forbid();
     }
 
+    [Authorize(Roles = "user, admin")]
     public async Task<IActionResult> Open(int assignmentId)
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
-        if (assignment != null && assignment.Status == 1)
+        var user = await _userManager.GetUserAsync(User);
+        if (assignment != null && assignment.Status == 1 && user != null && assignment.UserPerformerId == null && assignment.UserCreatorId != user.Id)
         {
+            assignment.UserPerformerId = user.Id;
             assignment.DateOpening = DateTime.UtcNow;
             assignment.Status = 2;
+            
             _context.Update(assignment);
             await _context.SaveChangesAsync();
+            
+            return RedirectToAction("Index");
         }
 
-        return RedirectToAction("Index");
+        return Forbid();
     }
     
+    [Authorize(Roles = "user, admin")]
     public async Task<IActionResult> Close(int assignmentId)
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
-        if (assignment != null && assignment.Status == 2)
+        var user = await _userManager.GetUserAsync(User);
+        if (assignment != null && assignment.Status == 2 && user != null && assignment.UserPerformerId == user.Id)
         {
             assignment.DateClosing = DateTime.UtcNow;
             assignment.Status = 3;
@@ -172,5 +199,47 @@ public class AssignmentController : Controller
         }
 
         return NotFound();
+    }
+
+    [Authorize(Roles = "user, admin")]
+    public async Task<IActionResult> Edit(int assignmentId)
+    {
+        Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
+        var user = await _userManager.GetUserAsync(User);
+        if (assignment != null && user != null && assignment.UserCreatorId == user.Id)
+        {
+            return View(assignment);
+        }
+        
+        return NotFound();
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "user, admin")]
+    public async Task<IActionResult> Edit(Assignment assignment)
+    {
+        if (ModelState.IsValid)
+        {
+            var existingAssignment = await _context.Assignments.AsNoTracking().FirstOrDefaultAsync(a => a.Id == assignment.Id);
+            var user = await _userManager.GetUserAsync(User);
+            if (existingAssignment != null && user != null && assignment.UserCreatorId == user.Id)
+            {
+                assignment.DateCreation = existingAssignment.DateCreation;
+                assignment.DateOpening = existingAssignment.DateOpening;
+                assignment.DateClosing = existingAssignment.DateClosing;
+                assignment.UserCreatorId = existingAssignment.UserCreatorId;
+                assignment.UserPerformerId = existingAssignment.UserPerformerId;
+                assignment.Status = existingAssignment.Status;
+                
+                _context.Assignments.Update(assignment);
+                await _context.SaveChangesAsync();
+                
+                return RedirectToAction("Index");
+            }
+
+            return NotFound();
+        }
+
+        return View(assignment);
     }
 }
