@@ -20,9 +20,10 @@ public class AssignmentController : Controller
         _userManager = userManager;
     }
     
-    public async Task<IActionResult> Index(string name, DateTime? dateFrom, DateTime? dateTo, string description, int? priority, int? status, SortAssignmentState sortAssignmentState = SortAssignmentState.NameAsc, int page = 1)
+    public async Task<IActionResult> Index(string name, DateTime? dateFrom, DateTime? dateTo, string description, int? priority, int? status, bool? isTakenByUser, bool? isFree, SortAssignmentState sortAssignmentState = SortAssignmentState.NameAsc, int page = 1)
     {
         IQueryable<Assignment> assignments = _context.Assignments;
+        var user = await _userManager.GetUserAsync(User);
         
         if (!string.IsNullOrWhiteSpace(name))
         {
@@ -49,6 +50,14 @@ public class AssignmentController : Controller
         if (status.HasValue)
         {
             assignments = assignments.Where(a => a.Status == status.Value);
+        }
+        if (isTakenByUser.HasValue && isTakenByUser.Value && user != null)
+        {
+            assignments = assignments.Where(a => a.UserPerformerId == user.Id);
+        }
+        if (isFree.HasValue && isFree.Value)
+        {
+            assignments = assignments.Where(a => a.UserPerformerId == null);
         }
         
         ViewBag.NameSort = sortAssignmentState == SortAssignmentState.NameAsc ? SortAssignmentState.NameDesc : SortAssignmentState.NameAsc;
@@ -101,7 +110,9 @@ public class AssignmentController : Controller
             Priority3 = (priority == 3),
             Status1 = (status == 1),
             Status2 = (status == 2),
-            Status3 = (status == 3)
+            Status3 = (status == 3),
+            IsTakenByUser = isTakenByUser,
+            IsFree = isFree
         };
         
         return View(aivm);
@@ -155,13 +166,30 @@ public class AssignmentController : Controller
     }
 
     [Authorize(Roles = "user, admin")]
+    public async Task<IActionResult> TakeOnTask(int assignmentId)
+    {
+        Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
+        var user = await _userManager.GetUserAsync(User);
+        if (assignment != null && user != null && assignment.UserPerformerId == null)
+        {
+            assignment.UserPerformerId = user.Id;
+            
+            _context.Update(assignment);
+            await _context.SaveChangesAsync();
+            
+            return RedirectToAction("Index");
+        }
+
+        return Forbid();
+    }
+
+    [Authorize(Roles = "user, admin")]
     public async Task<IActionResult> Open(int assignmentId)
     {
         Assignment assignment = await _context.Assignments.FirstOrDefaultAsync(a => a.Id == assignmentId);
         var user = await _userManager.GetUserAsync(User);
-        if (assignment != null && assignment.Status == 1 && user != null && assignment.UserPerformerId == null && assignment.UserCreatorId != user.Id)
+        if (assignment != null && assignment.Status == 1 && user != null && assignment.UserPerformerId == user.Id)
         {
-            assignment.UserPerformerId = user.Id;
             assignment.DateOpening = DateTime.UtcNow;
             assignment.Status = 2;
             

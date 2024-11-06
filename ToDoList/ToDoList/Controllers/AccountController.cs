@@ -14,11 +14,13 @@ public class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly ToDoListContext _context;
 
-    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ToDoListContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _context = context;
     }
     
     [HttpGet]
@@ -89,4 +91,23 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login");
     }
+    
+    public async Task<IActionResult> Profile()
+    {
+        User user = await _userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            var assignments = await _context.Assignments.Where(a => a.UserCreatorId == user.Id).ToListAsync();
+            var model = new UserProfileViewModel
+            {
+                User = user,
+                CreatedAssignments = assignments
+            };
+
+            return View(model);
+        }
+
+        return NotFound();
+    }
+
 }

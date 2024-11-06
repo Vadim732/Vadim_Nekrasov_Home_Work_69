@@ -18,5 +18,7 @@ public class AssignmentIndexViewModel
     public bool Status1 { get; set; }
     public bool Status2 { get; set; }
     public bool Status3 { get; set; }
-
+    
+    public bool? IsTakenByUser { get; set; }
+    public bool? IsFree { get; set; }
 }
