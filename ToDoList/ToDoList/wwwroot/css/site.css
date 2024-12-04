@@ -57,3 +57,16 @@ body {
   padding-bottom: 0.8em;
   border-radius: 0.5em;
 }
+
+.ml-1{
+  margin-left: 0.8em;
+}
+
+.mr-1 {
+  margin-right: 1.2em;
+}
+
+.avatar-block{
+  width: 9.8em;
+  height: 9.8em;
+}

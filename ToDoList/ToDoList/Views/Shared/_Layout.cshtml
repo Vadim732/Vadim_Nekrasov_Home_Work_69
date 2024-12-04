@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/ToDoList.styles.css" asp-append-version="true"/>
+    <script src="https://kit.fontawesome.com/f3ac9a9482.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
@@ -14,7 +15,7 @@
         <div class="container-fluid">
             @if (User.Identity.IsAuthenticated)
             {
-                <a class="navbar-brand text-white" asp-area="" asp-controller="Assignment" asp-action="Index">ToDoList</a>
+                <a class="navbar-brand text-white ml-1" asp-area="" asp-controller="Assignment" asp-action="Index"><i class="fa-solid fa-list-check"></i> ToDoList</a>
             }
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +26,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Assignment" asp-action="Create">Add new task</a>
+                            <a class="btn btn-outline-light ml-1" asp-controller="Assignment" asp-action="Create"><i class="fa-solid fa-plus"></i>  Add new task</a>
                         </li>
                     }
                 </ul>
@@ -33,16 +34,16 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>
+                            <a class="btn btn-light nav-link text-dark mr-1" asp-area="" asp-controller="Account" asp-action="Profile"><i class="fa-solid fa-user"></i> Profile</a>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="btn btn-light nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="btn btn-light nav-link text-dark ml-1 mr-1" asp-area="" asp-controller="Account" asp-action="Register"><i class="fa-solid fa-address-card"></i> Register</a>
                         </li>
                     }
                 </ul>

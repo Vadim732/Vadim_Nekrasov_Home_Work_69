@@ -16,6 +16,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LoginPath = "/Account/Login";
 });
 
+builder.Services.AddTransient<AssignmentService>();
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();

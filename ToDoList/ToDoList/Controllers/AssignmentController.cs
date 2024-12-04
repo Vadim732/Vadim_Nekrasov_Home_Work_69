@@ -13,13 +13,16 @@ public class AssignmentController : Controller
 {
     private readonly ToDoListContext _context;
     private readonly UserManager<User> _userManager;
+    private readonly AssignmentService _assignmentService;
 
-    public AssignmentController(ToDoListContext context, UserManager<User> userManager)
+    public AssignmentController(ToDoListContext context, UserManager<User> userManager, AssignmentService assignmentService)
     {
         _context = context;
         _userManager = userManager;
+        _assignmentService = assignmentService;
     }
     
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Client, NoStore = false)]
     public async Task<IActionResult> Index(string name, DateTime? dateFrom, DateTime? dateTo, string description, int? priority, int? status, bool? isTakenByUser, bool? isFree, SortAssignmentState sortAssignmentState = SortAssignmentState.NameAsc, int page = 1)
     {
         IQueryable<Assignment> assignments = _context.Assignments;

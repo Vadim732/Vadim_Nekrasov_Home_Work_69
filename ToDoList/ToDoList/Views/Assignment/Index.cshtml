@@ -5,9 +5,7 @@
 }
 
 <div class="text-center mb-2">
-    <button type="button" class="btn btn-dark m-0 mx-auto" data-bs-toggle="modal" data-bs-target="#filtration">
-        Filtration
-    </button>
+    <button type="button" class="btn btn-dark m-0 mx-auto w-25" data-bs-toggle="modal" data-bs-target="#filtration"><i class="fa-solid fa-sliders mr-1"></i> Filtration</button>
 </div>
 
 <div>
@@ -54,20 +52,20 @@
                     <td>
                         @if (a.Status == 1)
                         {
-                            <a asp-action="TakeOnTask" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-success">Take on the task</a>
-                            <a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Open</a>
-                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
-                            <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
+                            <a asp-action="TakeOnTask" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-success"><i class="fa-solid fa-mug-hot"></i> Take on the task</a>
+                            <a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-lock-open"></i> Open</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-circle-info"></i> Details</a>
+                            <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> Delete</a>
                         }
                         @if (a.Status == 2)
                         {
-                            <a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Close</a>
-                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                            <a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-lock"></i> Close</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-circle-info"></i> Details</a>
                         }
                         @if (a.Status == 3)
                         {
-                            <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
-                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                            <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> Delete</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-circle-info"></i> Details</a>
                         }
                     </td>
                 </tr>
@@ -77,8 +75,12 @@
     }
     else
     {
-        <h4 class="text-center">Unfortunately, there are no tasks for you at the moment :с</h4>
-        <p class="text-center"><a asp-action="Create" asp-controller="Assignment" class="btn btn-dark">Add new task</a></p>
+        <div class="bg-dark pt-2 mt-3 pb-2 text-center">
+            <h4 class="text-white">You haven't created any tasks yet :с</h4>
+            <div class="d-flex justify-content-center">
+                <a asp-action="Create" asp-controller="Assignment" class="btn btn-outline-light w-25 text-white mt-2"><i class="fa-solid fa-plus"></i> Add task!</a>
+            </div>
+        </div>
     }
 </div>
 
@@ -86,14 +88,14 @@
     <div class="me-auto">
         @if (Model.PageViewModel.HasPreviousPage)
         {
-            <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="btn btn-outline-light">Back</a>
+            <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="btn btn-outline-light"><i class="fa-solid fa-arrow-left"></i> Back</a>
         }
     </div>
     <h5 class="m-0 mx-auto">Pages</h5>
     <div class="ms-auto">
         @if (Model.PageViewModel.HasNextPage)
         {
-            <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="btn btn-outline-light">Next</a>
+            <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="btn btn-outline-light">Next <i class="fa-solid fa-arrow-right"></i></a>
         }
     </div>
 </div>
@@ -102,7 +104,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Task filtration</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="fa-solid fa-sliders"></i> Task filtration</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-white bg-dark">
@@ -149,7 +151,7 @@
                         <p class="text-secondary">Show free tasks</p>
                         <input type="checkbox" name="isFree" value="true" @(Model.IsFree == true ? "checked" : "") />
                     </div>
-                    <button type="submit" class="btn btn-outline-light mt-4 w-50 mx-auto d-block">Apply</button>
+                    <button type="submit" class="btn btn-outline-light mt-4 w-50 mx-auto d-block"><i class="fa-solid fa-magnifying-glass"></i> Apply</button>
                 </form>
             </div>
         </div>

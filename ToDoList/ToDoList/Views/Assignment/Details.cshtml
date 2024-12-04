@@ -7,47 +7,47 @@
 <div class="bg-dark text-white pt-4 mt-5">
     <div class="row px-5">
         <div class="col-4 border-end border-white">
-            <h4 class="text-center mb-5">Info</h4>
-            <p><strong>Task number: </strong>@Model.Id</p>
-            <p><strong>Task name: </strong>@Model.Name</p>
-            <p><strong>Performer: </strong>@Model.ArtistName</p>
-            <p><strong>Task creation date: </strong>@Model.DateCreation</p>
-            @if (Model.Priority == 1) { <p><strong>Priority: </strong><span class="priority-color-3">High</span></p> }
-            @if (Model.Priority == 2) { <p><strong>Priority: </strong><span class="priority-color-2">Medium</span></p> }
-            @if (Model.Priority == 3) { <p><strong>Priority: </strong><span class="priority-details-color-1">Low</span></p> }
-            @if (Model.Status == 1) { <p><strong>Status: </strong>New</p> }
-            @if (Model.Status == 2) { <p><strong>Status: </strong>Open</p> }
-            @if (Model.Status == 3) { <p><strong>Status: </strong>Closed</p> }
-            @if (Model.DateOpening != null) {<p><strong>Date opening: </strong>@Model.DateOpening</p>}
-            @if (Model.DateClosing != null) {<p><strong>Date closing: </strong>@Model.DateClosing</p>}
+            <h4 class="text-center mb-5"><i class="fa-solid fa-circle-info"></i>nfo</h4>
+            <p><strong class="mr-1"><i class="fa-solid fa-list-ol"></i> Task number: </strong>@Model.Id</p>
+            <p><strong class="mr-1"><i class="fa-solid fa-file-signature"></i> Task name: </strong>@Model.Name</p>
+            <p><strong class="mr-1"><i class="fa-solid fa-user"></i> Performer: </strong>@Model.ArtistName</p>
+            <p><strong class="mr-1"><i class="fa-regular fa-calendar-plus"></i> Task creation date: </strong>@Model.DateCreation</p>
+            @if (Model.Priority == 1) { <p><strong class="mr-1"><i class="fa-solid fa-circle-exclamation"></i> Priority: </strong><span class="priority-color-3">High</span></p> }
+            @if (Model.Priority == 2) { <p><strong class="mr-1"><i class="fa-solid fa-circle-exclamation"></i> Priority: </strong><span class="priority-color-2">Medium</span></p> }
+            @if (Model.Priority == 3) { <p><strong class="mr-1"><i class="fa-solid fa-circle-exclamation"></i> Priority: </strong><span class="priority-details-color-1">Low</span></p> }
+            @if (Model.Status == 1) { <p><strong class="mr-1"><i class="fa-solid fa-signal"></i> Status: </strong>New</p> }
+            @if (Model.Status == 2) { <p><strong class="mr-1"><i class="fa-solid fa-signal"></i> Status: </strong>Open</p> }
+            @if (Model.Status == 3) { <p><strong class="mr-1"><i class="fa-solid fa-signal"></i> Status: </strong>Closed</p> }
+            @if (Model.DateOpening != null) {<p><strong class="mr-1"><i class="fa-solid fa-calendar-days"></i> Date opening: </strong>@Model.DateOpening</p>}
+            @if (Model.DateClosing != null) {<p><strong class="mr-1"><i class="fa-solid fa-calendar-check"></i> Date closing: </strong>@Model.DateClosing</p>}
             <div class="border-top border-white mt-1 mb-1">
                 @if (Model.Status == 1)
                 {
-                    <p class="text-center mt-4"><a asp-action="TakeOnTask" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-success w-75">Take on the task</a></p>
-                    <p class="text-center mt-2"><a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Open</a></p>
-                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
+                    <p class="text-center mt-4"><a asp-action="TakeOnTask" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-success w-75"><i class="fa-solid fa-mug-hot"></i> Take on the task</a></p>
+                    <p class="text-center mt-2"><a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75"><i class="fa-solid fa-lock-open"></i> Open</a></p>
+                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75"><i class="fa-solid fa-circle-arrow-left"></i> To main page</a></p>
                     @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value || User.IsInRole("admin"))
                     {
-                        <p class="text-center mt-2"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75">Delete</a></p>
+                        <p class="text-center mt-2"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75"><i class="fa-solid fa-trash"></i> Delete</a></p>
                     }
                 }
                 @if (Model.Status == 2)
                 {
-                    <p class="text-center mt-4"><a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Close</a></p>
-                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
+                    <p class="text-center mt-4"><a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75"><i class="fa-solid fa-lock"></i> Close</a></p>
+                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75"><i class="fa-solid fa-circle-arrow-left"></i> To main page</a></p>
                 }
                 @if (Model.Status == 3)
                 {
                     @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value || User.IsInRole("admin"))
                     {
-                        <p class="text-center mt-4"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75">Delete</a></p>
+                        <p class="text-center mt-4"><a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-danger w-75"><i class="fa-solid fa-trash"></i> Delete</a></p>
                     }
-                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75">To main page</a></p>
+                    <p class="text-center mt-2"><a asp-action="Index" asp-controller="Assignment" class="btn btn-outline-light w-75"><i class="fa-solid fa-circle-arrow-left"></i> To main page</a></p>
                 }
                 @if (Model.UserCreatorId.ToString() == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value || User.IsInRole("admin"))
                 {
                     <p class="text-center mt-2">
-                        <a asp-action="Edit" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75">Edit task</a>
+                        <a asp-action="Edit" asp-controller="Assignment" asp-route-assignmentId="@Model.Id" class="btn btn-outline-light w-75"><i class="fa-solid fa-pen-to-square"></i> Edit task</a>
                     </p>
                 }
             </div>

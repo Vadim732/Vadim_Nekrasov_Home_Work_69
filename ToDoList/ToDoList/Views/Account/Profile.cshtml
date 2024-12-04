@@ -8,9 +8,9 @@
 <table class="table">
     <thead class="table-dark">
     <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Action</th>
+        <th><i class="fa-solid fa-user-ninja"></i> Name</th>
+        <th><i class="fa-solid fa-envelope"></i> Email</th>
+        <th><i class="fa-solid fa-computer-mouse"></i> Action</th>
     </tr>
     </thead>
     <tbody>
@@ -18,7 +18,7 @@
         <td>@Model.User.UserName</td>
         <td>@Model.User.Email</td>
         <td>
-            <a class="btn btn-outline-danger" asp-controller="Account" asp-action="Logout">Logout</a>
+            <a class="btn btn-outline-danger" asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-door-open"></i> Logout</a>
         </td>
     </tr>
     </tbody>
@@ -31,12 +31,12 @@
         <table class="table table-striped">
             <thead class="table-dark">
             <tr>
-                <th>Task name</th>
-                <th>Performer</th>
-                <th>Task date creation</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th><i class="fa-solid fa-file-signature"></i> Task name</th>
+                <th><i class="fa-solid fa-user"></i> Performer</th>
+                <th><i class="fa-solid fa-calendar-days"></i> Task date creation</th>
+                <th><i class="fa-solid fa-circle-exclamation"></i> Priority</th>
+                <th><i class="fa-solid fa-signal"></i> Status</th>
+                <th><i class="fa-solid fa-computer-mouse"></i> Action</th>
             </tr>
             </thead>
             <tbody>
@@ -59,20 +59,20 @@
                     <td>
                         @if (a.Status == 1)
                         {
-                            <a asp-action="TakeOnTask" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-success">Take on the task</a>
-                            <a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Open</a>
-                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                            <a asp-action="TakeOnTask" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-success"><i class="fa-solid fa-mug-hot"></i> Take on the task</a>
+                            <a asp-action="Open" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-lock-open"></i> Open</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-circle-info"></i> Details</a>
                             <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
                         }
                         @if (a.Status == 2)
                         {
-                            <a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Close</a>
-                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                            <a asp-action="Close" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-lock"></i> Close</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-circle-info"></i> Details</a>
                         }
                         @if (a.Status == 3)
                         {
                             <a asp-action="Delete" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-danger">Delete</a>
-                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark">Details</a>
+                            <a asp-action="Details" asp-controller="Assignment" asp-route-assignmentId="@a.Id" class="btn btn-outline-dark"><i class="fa-solid fa-circle-info"></i> Details</a>
                         }
                     </td>
                 </tr>
@@ -82,7 +82,11 @@
     }
     else
     {
-        <h4 class="text-center">You haven't created any tasks yet :с</h4>
-        <p class="text-center"><a asp-action="Create" asp-controller="Assignment" class="btn btn-dark">Add task</a></p>
+        <div class="bg-dark pt-2 mt-3 pb-2 text-center">
+            <h4 class="text-white">You haven't created any tasks yet :с</h4>
+            <div class="d-flex justify-content-center">
+                <a asp-action="Create" asp-controller="Assignment" class="btn btn-outline-light w-25 text-white mt-2"><i class="fa-solid fa-plus"></i> Add task!</a>
+            </div>
+        </div>
     }
 </div>
